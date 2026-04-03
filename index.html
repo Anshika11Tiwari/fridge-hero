@@ -1,0 +1,111 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🍳 Fridge Hero</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial;
+      background: linear-gradient(to right, #ffecd2, #fcb69f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #ff7e5f;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .card {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🍳 Fridge Hero</h1>
+
+  <input id="ing1" placeholder="Ingredient 1">
+  <input id="ing2" placeholder="Ingredient 2">
+  <input id="ing3" placeholder="Ingredient 3">
+
+  <button id="btn" onclick="cook()">Cook Magic ✨</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+async function cook() {
+  const btn = document.getElementById("btn");
+  const resultDiv = document.getElementById("result");
+
+  const ing1 = document.getElementById("ing1").value;
+  const ing2 = document.getElementById("ing2").value;
+  const ing3 = document.getElementById("ing3").value;
+
+  if (!ing1 || !ing2 || !ing3) {
+    alert("Enter all ingredients!");
+    return;
+  }
+
+  btn.innerText = "Loading...";
+  resultDiv.innerHTML = "";
+
+  try {
+    const res = await fetch("/api/cook", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ing1, ing2, ing3 })
+    });
+
+    const data = await res.json();
+
+    resultDiv.innerHTML = `
+      <div class="card">
+        ${data.output.replace(/\n/g, "<br>")}
+      </div>
+    `;
+  } catch (err) {
+    resultDiv.innerHTML = "Error generating recipe";
+  }
+
+  btn.innerText = "Cook Magic ✨";
+}
+</script>
+
+</body>
+</html>
