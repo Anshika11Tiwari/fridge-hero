@@ -1,297 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fridge Hero</title>
-    <style>
-        /* Reset default browser styles and set up the base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridge Hero</title>
 
-        /* Body styling - centers everything and adds a gradient background */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
 
-        /* Main container - the white card that holds everything */
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            width: 100%;
-        }
+body {
+    font-family:'Segoe UI',sans-serif;
+    min-height:100vh;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
 
-        /* App title styling */
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-        }
+.container {
+    background:white;
+    border-radius:20px;
+    padding:40px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+    max-width:500px;
+    width:100%;
+}
 
-        /* Subtitle/tagline */
-        .tagline {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1rem;
-        }
+h1 { text-align:center; margin-bottom:10px; }
 
-        /* Container for the input fields */
-        .input-group {
-            margin-bottom: 20px;
-        }
+.tagline {
+    text-align:center;
+    margin-bottom:30px;
+    color:#666;
+}
 
-        /* Label styling */
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #444;
-            font-weight: 600;
-        }
+input {
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
 
-        /* Input field styling */
-        input[type="text"] {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
+button {
+    width:100%;
+    padding:14px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
 
-        /* Input focus state - purple border when clicked */
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
-        }
+.recipe-card {
+    margin-top:20px;
+    padding:20px;
+    background:#f9f9f9;
+    border-radius:10px;
+    display:none;
+}
 
-        /* Button styling */
-        button {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 10px;
-        }
-
-        /* Button hover effect */
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Disabled button state during loading */
-        button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Recipe card - hidden by default, shown when recipe is generated */
-        .recipe-card {
-            margin-top: 30px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-
-        /* Recipe title (dish name) */
-        .recipe-card h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-            text-align: center;
-        }
-
-        /* Recipe content text */
-        .recipe-content {
-            color: #555;
-            line-height: 1.8;
-            white-space: pre-wrap;
-        }
-
-        /* Error message styling */
-        .error {
-            background: #fee;
-            color: #c00;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-    </style>
+.error {
+    color:red;
+    margin-top:10px;
+    display:none;
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- App Header -->
-        <h1>🍳 Fridge Hero</h1>
-        <p class="tagline">Turn random ingredients into culinary magic!</p>
 
-        <!-- Ingredient Input Fields -->
-        <div class="input-group">
-            <label for="ingredient1">Ingredient 1</label>
-            <input type="text" id="ingredient1" placeholder="e.g., chicken">
-        </div>
+<div class="container">
+<h1>🍳 Fridge Hero</h1>
+<p class="tagline">Turn ingredients into magic ✨</p>
 
-        <div class="input-group">
-            <label for="ingredient2">Ingredient 2</label>
-            <input type="text" id="ingredient2" placeholder="e.g., garlic">
-        </div>
+<input id="ingredient1" placeholder="Ingredient 1">
+<input id="ingredient2" placeholder="Ingredient 2">
+<input id="ingredient3" placeholder="Ingredient 3">
 
-        <div class="input-group">
-            <label for="ingredient3">Ingredient 3</label>
-            <input type="text" id="ingredient3" placeholder="e.g., lemon">
-        </div>
+<button id="btn" onclick="generateRecipe()">Cook Magic</button>
 
-        <!-- Submit Button -->
-        <button id="cookButton" onclick="generateRecipe()">
-            ✨ Cook Magic
-        </button>
+<div id="recipeCard" class="recipe-card">
+<h2 id="dishName"></h2>
+<div id="recipeContent"></div>
+</div>
 
-        <!-- Recipe Output Card (hidden until recipe is generated) -->
-        <div class="recipe-card" id="recipeCard">
-            <h2 id="dishName"></h2>
-            <div class="recipe-content" id="recipeContent"></div>
-        </div>
+<div id="errorMessage" class="error"></div>
+</div>
 
-        <!-- Error Message (hidden unless there's an error) -->
-        <div class="error" id="errorMessage"></div>
-    </div>
+<script>
+async function generateRecipe() {
 
-    <script>
-        // IMPORTANT: Replace this with your actual Gemini API key
-        const API_KEY = 'AIzaSyA4VVx2cW15TQ3tvvzn3fFtv7myexlawoY';
+    const btn = document.getElementById("btn");
+    const error = document.getElementById("errorMessage");
+    const card = document.getElementById("recipeCard");
 
-        // This function runs when the user clicks "Cook Magic"
-        async function generateRecipe() {
-            // Step 1: Get references to HTML elements we need to work with
-            const button = document.getElementById('cookButton');
-            const recipeCard = document.getElementById('recipeCard');
-            const dishName = document.getElementById('dishName');
-            const recipeContent = document.getElementById('recipeContent');
-            const errorMessage = document.getElementById('errorMessage');
+    const ing1 = document.getElementById("ingredient1").value.trim();
+    const ing2 = document.getElementById("ingredient2").value.trim();
+    const ing3 = document.getElementById("ingredient3").value.trim();
 
-            // Step 2: Read the ingredient values from the input fields
-            const ingredient1 = document.getElementById('ingredient1').value.trim();
-            const ingredient2 = document.getElementById('ingredient2').value.trim();
-            const ingredient3 = document.getElementById('ingredient3').value.trim();
+    if (!ing1 || !ing2 || !ing3) {
+        error.innerText = "Enter all ingredients!";
+        error.style.display = "block";
+        return;
+    }
 
-            // Step 3: Validate that all fields are filled
-            if (!ingredient1 || !ingredient2 || !ingredient3) {
-                errorMessage.textContent = 'Please enter all three ingredients!';
-                errorMessage.style.display = 'block';
-                recipeCard.style.display = 'none';
-                return; // Stop the function here
-            }
+    error.style.display = "none";
+    card.style.display = "none";
+    btn.innerText = "Loading...";
+    btn.disabled = true;
 
-            // Step 4: Hide any previous error and show loading state
-            errorMessage.style.display = 'none';
-            recipeCard.style.display = 'none';
-            button.textContent = '⏳ Loading...';
-            button.disabled = true;
-
-            // Step 5: Build the prompt for Gemini
-            // This is where prompt engineering matters!
-            const prompt = `I have these three ingredients: ${ingredient1}, ${ingredient2}, and ${ingredient3}. 
-
-Create a fancy, creative dish name and provide a simple 3-step recipe.
-
-Format your response exactly like this:
-DISH NAME: [Your creative dish name here]
-
-RECIPE:
-Step 1: [First step]
-Step 2: [Second step]  
-Step 3: [Third step]`;
-
-            // Step 6: Make the API call using try/catch for error handling
-            try {
-                // The fetch function makes an HTTP request to the Gemini API
-                const response = await fetch(
-                    `[generativelanguage.googleapis.com](https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY})`,
-                    {
-                        method: 'POST', // We're sending data, so we use POST
-                        headers: {
-                            'Content-Type': 'application/json' // Tell the server we're sending JSON
-                        },
-                        body: JSON.stringify({
-                            contents: [
-                                {
-                                    parts: [{ text: prompt }]
-                                }
-                            ]
-                        })
-                    }
-                );
-
-                // Step 7: Check if the response was successful
-                if (!response.ok) {
-                    throw new Error('API request failed. Check your API key.');
-                }
-
-                // Step 8: Parse the JSON response
-                const data = await response.json();
-
-                // Step 9: Extract the text from Gemini's response
-                // The response structure is: data.candidates[0].content.parts[0].text
-                const result = data.candidates[0].content.parts[0].text;
-
-                // Step 10: Parse the response to separate dish name and recipe
-                // We look for "DISH NAME:" in the response
-                let parsedDishName = '🍽️ Your Custom Creation';
-                let parsedRecipe = result;
-
-                if (result.includes('DISH NAME:')) {
-                    const parts = result.split('RECIPE:');
-                    parsedDishName = parts[0].replace('DISH NAME:', '').trim();
-                    parsedRecipe = parts[1] ? parts[1].trim() : result;
-                }
-
-                // Step 11: Display the results
-                dishName.textContent = parsedDishName;
-                recipeContent.textContent = parsedRecipe;
-                recipeCard.style.display = 'block';
-
-            } catch (error) {
-                // If anything goes wrong, show an error message
-                console.error('Error:', error);
-                errorMessage.textContent = 'Something went wrong. Please check your API key and try again.';
-                errorMessage.style.display = 'block';
-            } finally {
-                // Step 12: Reset the button regardless of success or failure
-                button.textContent = '✨ Cook Magic';
-                button.disabled = false;
-            }
-        }
-
-        // Allow pressing Enter to submit
-        document.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                generateRecipe();
-            }
+    try {
+        const res = await fetch("/api/cook", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ ing1, ing2, ing3 })
         });
-    </script>
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error);
+
+        document.getElementById("dishName").innerText = "🍽️ Your Dish";
+        document.getElementById("recipeContent").innerText = data.output;
+
+        card.style.display = "block";
+
+    } catch (err) {
+        error.innerText = "Error generating recipe";
+        error.style.display = "block";
+    }
+
+    btn.innerText = "Cook Magic";
+    btn.disabled = false;
+}
+</script>
+
 </body>
 </html>
