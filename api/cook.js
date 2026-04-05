@@ -6,7 +6,20 @@ export default async function handler(req, res) {
 
     const { ing1, ing2, ing3 } = req.body;
 
-    const prompt = `I have ${ing1}, ${ing2}, and ${ing3}. Give a fancy dish name and a simple 3-step recipe.`;
+    const prompt = `You are a helpful cooking assistant.
+
+Using ONLY these ingredients:
+${ing1}, ${ing2}, ${ing3}
+
+Give output in this format:
+
+Dish Name: <name>
+
+Recipe:
+1. Step one
+2. Step two
+3. Step three
+`;
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
